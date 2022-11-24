@@ -1,7 +1,20 @@
+
 import styles from '../styles/Home.module.css';
 import {useState} from 'react'
-function Home() {
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router'
 
+import { useDispatch } from 'react-redux';
+import {showStatusLog , showIds} from '../reducers/logged';
+function Home() {
+  const router = useRouter()
+
+  const dispatch = useDispatch();
+  const logStatus = useSelector((state) => state.logged.value);
+
+
+  
+  
   const[firstnameI,setFirstnameI]=useState()
 
   const[usernameI,setUsernameI]=useState()
@@ -98,7 +111,19 @@ function Home() {
       }).then(response => response.json())
         .then(data => {
           console.log(data)
-          // if(data.result){
+          if(data.result){
+
+            dispatch(showStatusLog(true))
+            dispatch(showIds([data.user.username]))
+            dispatch(showIds([data.user.firstname]))
+
+            router.push('/tweet')
+
+
+
+
+
+          }
 
           //   // setIsSubscrided(true)
 
@@ -112,11 +137,28 @@ function Home() {
 
   }
 
-    //Bouton Connexion
 
   const signIn =()=>{
-    
+
+    fetch('http://localhost:3000/users/signin',{
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({username:usernameC,password:passwordC})
+      }).then(response => response.json())
+        .then(data => {
+          console.log(data)
+          if(data.result){
+            dispatch(showStatusLog(true))
+            dispatch(showIds([data.user.username]))
+            dispatch(showIds([data.user.firstname]))
+
+            router.push('/tweet')
+          }
+        });
   }
+  
   return (
     <div>
 
@@ -141,7 +183,6 @@ function Home() {
       </div>
 
       <div className={styles.signUpPopUp} style={signInStyle}>
-        
         <h3>Sign In</h3>
         <span onClick={()=>HideSIBlack()}>x</span>
         <img src='twitter_logo_white.png' alt='logo twitter'></img>
@@ -150,8 +191,8 @@ function Home() {
         type='text' placeholder='username'></input>
         <input
         onChange={(e) => setPasswordC(e.target.value)} value={passwordC}
-        type='text' placeholder='password'></input>
-        <button>Sign In</button>
+        type='password' placeholder='password'></input>
+        <button onClick={()=>signIn()}  >Sign In</button>
       </div>
       <main className={styles.main}>
         <div className={styles.blockLeft}>
@@ -171,3 +212,7 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
