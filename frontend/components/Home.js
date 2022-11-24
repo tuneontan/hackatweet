@@ -1,6 +1,5 @@
 import styles from '../styles/Home.module.css';
 import {useState} from 'react'
-import { set } from 'mongoose';
 function Home() {
 
   const [appearSignUp,setAppearSignUp] = useState(false)
