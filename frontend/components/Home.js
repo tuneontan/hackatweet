@@ -55,6 +55,8 @@ function Home() {
   const HideSUBlack= ()=>{
     setAppearBlack(false)
     setAppearSignUp(false)
+    setAppearSignIn(false)
+
   }
   const HideSIBlack= ()=>{
     setAppearBlack(false)
@@ -80,7 +82,6 @@ function Home() {
         <h3>Sign In</h3>
         <span onClick={()=>HideSIBlack()}>x</span>
         <img src='twitter_logo_white.png' alt='logo twitter'></img>
-        <input type='text' placeholder='firstname'></input>
         <input type='text' placeholder='username'></input>
         <input type='text' placeholder='password'></input>
         <button>Sign In</button>
