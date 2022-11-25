@@ -31,7 +31,7 @@ router.post("/signup", (req, res) => {
       });
 
       newUser.save().then(() => {
-        res.json({ result: true, user:newUser });
+        res.json({ result: true, user: newUser });
       });
     } else {
       // User already exists in database
@@ -40,32 +40,24 @@ router.post("/signup", (req, res) => {
   });
 });
 
-router.post('/signin', (req, res) => {
-
-  if (!checkBody(req.body, ['username', 'password'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
+router.post("/signin", (req, res) => {
+  if (!checkBody(req.body, ["username", "password"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
-User.findOne({ username: req.body.username }).then(data => {
-
- 
-
-  if(data==null){
-
-   res.json({result:false})
-  }else{
-
-
- 
-  if (bcrypt.compareSync(req.body.password, data.password)) {
-    res.json({ result: true,user:data })
-  } else {
-    res.json({ result: false });
-  }
-  }});
-})
+  User.findOne({ username: req.body.username }).then((data) => {
+    if (data == null) {
+      res.json({ result: false });
+    } else {
+      if (bcrypt.compareSync(req.body.password, data.password)) {
+        res.json({ result: true, user: data });
+      } else {
+        res.json({ result: false });
+      }
+    }
+  });
+});
 // SIGNIN ROOTS
-
 
 // ADD TWEET ROOTS
 
@@ -86,79 +78,67 @@ User.findOne({ username: req.body.username }).then(data => {
 
 // }
 
-
-  
-
-
-
 // });
 
 //how are
 
-router.post('/addtweet', (req, res) => {
-  if (!checkBody(req.body, ['content'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
-    return;
-  }
-  const newTweet = new Tweet({
-    firstname: req.body.firstname,
-    username: req.body.username,
-    content: req.body.content,
-    date: new Date(),
-  });
-  newTweet.save().then(() => {
-    res.json({ result: true, tweet: newTweet });
-  }
-  );
-});
-
+// router.post('/addtweet', (req, res) => {
+//   if (!checkBody(req.body, ['content'])) {
+//     res.json({ result: false, error: 'Missing or empty fields' });
+//     return;
+//   }
+//   const newTweet = new Tweet({
+//     firstname: req.body.firstname,
+//     username: req.body.username,
+//     content: req.body.content,
+//     date: new Date(),
+//   });
+//   newTweet.save().then(() => {
+//     res.json({ result: true, tweet: newTweet });
+//   }
+//   );
+// });
 
 //add tweet
-router.post('/tweets', (req, res) => {
-  if (!checkBody(req.body, ['content'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
+const regexHashTag = /(#+[a-zA-Z0-9(_)]{1,})/;
+
+router.post("/tweets", (req, res) => {
+  if (!checkBody(req.body, ["content"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
   const newTweet = new Tweet({
     firstname: req.body.firstname,
     username: req.body.username,
     content: req.body.content,
-
   });
+
+  let hashtag = newTweet.content.match(regexHashTag);
+
   newTweet.save().then(() => {
-    res.json({ result: true, tweet: newTweet });
+    res.json({ result: true, tweet: newTweet, hashTags: hashtag });
   });
 });
 
 router.get("/tweets", (req, res) => {
-
-  Tweet.find({},function(err,data){
-
-
-    if(data){
+  Tweet.find({}, function (err, data) {
+    if (data) {
       res.json({
-        allTweet : data.sort()
-      })
-    }else
-    
-    if(err){
+        allTweet: data.sort(),
+      });
+    } else if (err) {
       res.json({
-        azz:"oussama"
-      })
+        azz: "oussama",
+      });
     }
-     
-    
-  
-
-
-})
-})
+  });
+});
 
 // SEARCH HASHTAG ROOTS
 
 router.get("/searchTweets", (req, res) => {
   res.json(tweet);
-}); 
+});
 
 // DELETE TWEET ROOTS
 
@@ -167,11 +147,13 @@ router.delete("tweets", (req, res) => {
   res.json(tweets);
 });
 
-router.get('/user/infos', (req, res) => {
-  User.findOne({ username: req.body.username }).then(data => {
+router.get("/user/infos", (req, res) => {
+  User.findOne({ username: req.body.username }).then((data) => {});
+});
 
-  })
+
+router.get("/tweets/#hastags", (req, res) => {
+  
 
 })
-
 module.exports = router;

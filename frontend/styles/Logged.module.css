@@ -154,6 +154,9 @@
 .like{
   margin: 1rem;
 }
+.erase{
+  display: none;
+}
 .like,.erase{
   cursor: pointer;
   font-size: 2rem;

@@ -4,48 +4,40 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { showStatusLog, showIds, eraseId } from "../reducers/logged";
 import { useState, useEffect } from "react";
-import{FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faHeart,faTrash} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
 function Logged() {
   const dispatch = useDispatch();
-
   const [isErased, setIsErased] = useState(false);
   const router = useRouter();
   let logStatus = useSelector((state) => state.logged.value);
-
   const [tweetContent, setTweetContent] = useState([]);
   const [tweetData, setTweetData] = useState([]);
-  
+
+  let styleHashtag = {};
 
   if (!logStatus[1]) {
     router.push("/");
   }
   useEffect(() => {
-    fetch("http://localhost:3000/users/tweets").then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      setTweetData(data.allTweet);
+    fetch("http://localhost:3000/users/tweets")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setTweetData(data.allTweet);
+      });
+  }, [tweetData]);
+  const refreshData = () => {
+    fetch("http://localhost:3000/users/tweets")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setTweetData(data.allTweet);
+      });
+  };
 
-    });
+  const regexHashTag = /(#+[a-zA-Z0-9(_)]{1,})/;
 
-}, [tweetData]);
-const refreshData = ()=>{
-
-        fetch("http://localhost:3000/users/tweets").then((response) => response.json())
-        .then((data) => {
-          console.log(data)
-          setTweetData(data.allTweet);
-    
-        });
-    
-    }
-     
-    
-    
-      
-
-
- 
   const tweet = () => {
     // refreshData()
 
@@ -56,26 +48,18 @@ const refreshData = ()=>{
       },
       body: JSON.stringify({
         firstname: logStatus[1].toString(),
-        username:logStatus[2].toString(),
+        username: logStatus[2].toString(),
         content: tweetContent.toString(),
 
         // firstname: logStatus[1],
         // username: logStatus[2],
-        
+
         // content: tweetContent,
-        date:new Date().toLocaleTimeString()
+        date: new Date().toLocaleTimeString(),
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-   
-
-      });
-
-
-    
-
-
+      .then((data) => {});
   };
 
   const eraseLogStatus = () => {
@@ -83,36 +67,48 @@ const refreshData = ()=>{
     router.push("/");
   };
 
-  
- 
+  const tweetList = tweetData.map((data, i) => {
 
 
-  const tweetList = tweetData.map((data,i)=>{
 
-
+    if(data.username == logStatus[2] && data.firstname == logStatus[1]){
     
 
+        styleHashtag={'display':'inline'}
+
+    }else{
+        styleHashtag={'display':'none'}
+
+        
+    }
+    let hashtag = data.content.match(regexHashTag);
+
+  
     return (
-        <>
-       <div className={style.ListTweet}>
-        <ul>
-            <li><img src="./iconetwitter.jpeg"></img></li>
-            <li> <span>{data.username}</span>@{data.firstname} <span>{data.date}</span></li>
-      
-
-        </ul>
-        <p>{data.content}</p>
-
-        <div className={style.buttonContainer}>
-        <span className={style.like}><FontAwesomeIcon icon={faHeart}></FontAwesomeIcon></span><span className={style.erase}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon></span>
-
+      <>
+        <div className={style.ListTweet}>
+          <ul>
+            <li>
+              <img src="./iconetwitter.jpeg"></img>
+            </li>
+            <li>
+              <span>{data.username}</span>@{data.firstname}{" "}
+              <span>{data.date}</span>
+            </li>
+          </ul>
+          <p>{data.content}</p>
+          <div className={style.buttonContainer}>
+            <span className={style.like}>
+              <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
+            </span>
+            <span  style={styleHashtag} className={style.erase}>
+              <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+            </span>
+          </div>
         </div>
-
-       </div>
-        </>
-    )
-
-  })
+      </>
+    );
+  });
 
   return (
     <>
@@ -143,7 +139,7 @@ const refreshData = ()=>{
             <ul className={style.gridButton}>
               <li>{tweetContent.length}/280</li>
               <li>
-                <button onClick={()=>tweet()}>Tweet</button>
+                <button onClick={() => tweet()}>Tweet</button>
               </li>
             </ul>
           </div>
