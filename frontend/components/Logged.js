@@ -27,15 +27,7 @@ function Logged() {
         setTweetData(data.allTweet);
       });
   }, [tweetData]);
-  const refreshData = () => {
-    fetch("http://localhost:3000/users/tweets")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setTweetData(data.allTweet);
-      });
-  };
-
+ 
   const tweet = () => {
     // refreshData()
 
