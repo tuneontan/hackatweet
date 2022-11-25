@@ -107,18 +107,29 @@ router.post("/tweets", (req, res) => {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
-  const newTweet = new Tweet({
-    firstname: req.body.firstname,
-    username: req.body.username,
-    content: req.body.content,
-  });
+  if(req.body.content.length<280){
+    const newTweet = new Tweet({
+      firstname: req.body.firstname,
+      username: req.body.username,
+      content: req.body.content,
+    });
+  
+    let hashtag = newTweet.content.match(regexHashTag);
+  
+    newTweet.save().then(() => {
+      res.json({ result: true, tweet: newTweet, hashTags: hashtag });
+    });
+  }else{
 
-  let hashtag = newTweet.content.match(regexHashTag);
-
-  newTweet.save().then(() => {
-    res.json({ result: true, tweet: newTweet, hashTags: hashtag });
-  });
+    res.json({
+      result:false,
+      message:'hey '
+    })
+  }
+  
 });
+
+// DISPLAY ALL TWEETS
 
 router.get("/tweets", (req, res) => {
   Tweet.find({}, function (err, data) {
@@ -142,10 +153,31 @@ router.get("/searchTweets", (req, res) => {
 
 // DELETE TWEET ROOTS
 
-router.delete("tweets", (req, res) => {
-  tweets = [];
-  res.json(tweets);
-});
+// router.delete("/tweets/delete", (req, res) => {
+ 
+//   Tweet.findOneAndDelete({_id:req.body.id}).then((data) => {
+
+
+//     if(data){
+//       res.json(data)
+//     }else{
+//       res.json("rien")
+//     }
+
+//   })
+
+
+
+  
+router.delete('/tweets/:id', (req, res) => {
+
+  
+
+
+ });
+
+
+ 
 
 router.get("/user/infos", (req, res) => {
   User.findOne({ username: req.body.username }).then((data) => {});

@@ -16,6 +16,14 @@ function Logged() {
 
   let styleHashtag = {};
 
+  let styleTextMax = {}
+
+
+
+  if(tweetContent.length>280){
+
+    styleTextMax = {'color':'red'}
+  }
   if (!logStatus[1]) {
     router.push("/");
   }
@@ -137,7 +145,7 @@ function Logged() {
               placeholder="What's up"
             ></input>
             <ul className={style.gridButton}>
-              <li>{tweetContent.length}/280</li>
+              <li><span style={styleTextMax}>{tweetContent.length}</span>/280</li>
               <li>
                 <button onClick={() => tweet()}>Tweet</button>
               </li>
