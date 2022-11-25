@@ -17,7 +17,9 @@ function Logged() {
   const [tweetData, setTweetData] = useState([]);
   
 
-
+  if (!logStatus[1]) {
+    router.push("/");
+  }
   useEffect(() => {
     fetch("http://localhost:3000/users/tweets").then((response) => response.json())
     .then((data) => {
@@ -82,15 +84,12 @@ const refreshData = ()=>{
   };
 
   
-  if (!logStatus[1]) {
-    router.push("/");
-  }
+ 
 
 
   const tweetList = tweetData.map((data,i)=>{
 
 
-    if(data.username == logStatus[1] || data.username == logStatus[2])
     
 
     return (
