@@ -62,38 +62,97 @@ User.findOne({ username: req.body.username }).then(data => {
   } else {
     res.json({ result: false });
   }
-  }
-
-
-
-
- });
+  }});
 })
 // SIGNIN ROOTS
 
-router.post("/signin", (req, res) => {
-  if (!checkBody(req.body, ["firstname", "username", "password"])) {
-    res.json({ result: false, error: "Missing or empty fields" });
-    return;
-  }
-
-  User.findOne({ username: req.body.username }).then((data) => {
-    if (bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true });
-    } else {
-      res.json({ result: false });
-    }
-  });
-});
 
 // ADD TWEET ROOTS
 
-let = tweets = [];
+// router.post("/tweets", (req, res) => {
+//   if(req.body.content){
+//   const newTweet = new Tweet({
+//     firstname: req.body.firstname,
+//     username: req.body.username,
+//     content: req.body.content,
+//     date: new Date(),
+//   });
+//   newTweet.save().then(() => {
+//     res.json({ result: true, tweet: newTweet });
+//   }
+//   );
+// }else{
+//   res.json({result:false})
 
-router.post("/tweets", (req, res) => {
-  const newTweet = new Tweet
-  tweets.push(req.body);
+// }
+
+
+  
+
+
+
+// });
+
+//how are
+
+router.post('/addtweet', (req, res) => {
+  if (!checkBody(req.body, ['content'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+  const newTweet = new Tweet({
+    firstname: req.body.firstname,
+    username: req.body.username,
+    content: req.body.content,
+    date: new Date(),
+  });
+  newTweet.save().then(() => {
+    res.json({ result: true, tweet: newTweet });
+  }
+  );
 });
+
+
+//add tweet
+router.post('/tweets', (req, res) => {
+  if (!checkBody(req.body, ['content'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+  const newTweet = new Tweet({
+    firstname: req.body.firstname,
+    username: req.body.username,
+    content: req.body.content,
+
+  });
+  newTweet.save().then(() => {
+    res.json({ result: true, tweet: newTweet });
+  });
+});
+
+router.get("/tweets", (req, res) => {
+
+  Tweet.find({},function(err,data){
+
+
+    if(data){
+      res.json({
+        allTweet : data.sort()
+      })
+    }else
+    
+    if(err){
+      res.json({
+        azz:"oussama"
+      })
+    }
+     
+    
+  
+
+
+})
+})
 
 // SEARCH HASHTAG ROOTS
 
@@ -115,11 +174,4 @@ router.get('/user/infos', (req, res) => {
 
 })
 
-router.post('/tweets', (req, res) => {
-
-
-
-
-
-})
 module.exports = router;

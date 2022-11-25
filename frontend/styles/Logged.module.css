@@ -6,7 +6,9 @@
   height: 100vh;
 
 }
-
+.buttonContainer{
+  padding: 1rem;
+}
 
 .firstPart{
 
@@ -25,6 +27,7 @@
   width: 3rem;
 }
 .secondPart{
+  overflow-y: scroll;
   float: left;
   width: 50%;
   height: 100vh;
@@ -81,7 +84,11 @@
 
 .writeTwitter{
   display: block;
+  position: sticky;
+  top: 0rem;
+  background-color: rgb(30,37,47);
   margin: 0 auto;
+  z-index: 3;
   width: 100%;
   height: auto;
   border-bottom: .1rem solid rgba(255, 255, 255, 0.147);
@@ -121,6 +128,8 @@
 }
 .writeTwitter>ul>li>button{
   color: white;
+  transition: all .3s;
+  cursor: pointer;
   background-color: rgb(100,153,236);
   border-radius: 1rem;
   padding: .5rem;
@@ -128,7 +137,11 @@
   border: none;
   padding-right: 1rem;
 }
+.writeTwitter>ul>li>button:hover{
+  transition: all .3s;
+  background-color: rgb(49, 74, 115);
 
+}
 .containerTrends{
   list-style: none;
   color: white;
@@ -137,4 +150,61 @@
 .containerTrends>li{
   font-weight: 800;
   padding: 1rem;
+}
+.like{
+  margin: 1rem;
+}
+.like,.erase{
+  cursor: pointer;
+  font-size: 2rem;
+  color: rgb(255, 255, 255);
+}
+.ListTweet{
+  display: block;
+  color: white;
+  width: 100%;
+  margin: 0 auto;
+  border-bottom: .1rem solid rgba(255, 255, 255, 0.108);
+
+}
+
+.ListTweet>ul>li>img{
+  background-color: red;
+  display: block;
+  width: 5rem;
+  clip-path: circle(40%);
+}
+
+.ListTweet>ul{
+  align-items: center;
+  width: 23rem;
+  gap: 0rem;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  color: white;
+
+  list-style: none;
+}
+
+.ListTweet>ul>li:nth-child(2){
+  margin-left: -4rem;
+
+  font-size: 1rem;
+}
+.ListTweet>ul>li>span{
+  font-weight: 800;
+}
+.ListTweet>ul>li{
+  font-weight: 300;
+}
+
+.ListTweet>p{
+  display: block;
+
+  margin: 1rem;
+
+  font-size: 1.3rem;
+  /* margin-left: 3rem; */
+  
+
 }
