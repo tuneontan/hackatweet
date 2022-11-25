@@ -119,6 +119,7 @@ function Home() {
   };
 
   const signIn = () => {
+   
     fetch("http://localhost:3000/users/signin", {
       method: "POST",
       headers: {
@@ -138,6 +139,11 @@ function Home() {
         }
       });
   };
+
+  if (logStatus[1]) {
+
+    router.push("/tweet")
+  }
 
   return (
     <div>

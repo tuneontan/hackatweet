@@ -16,17 +16,33 @@ function Logged() {
 
   let styleHashtag = {};
 
-  let styleTextMax = {}
+  let styleTextMax = {};
+
+  const removeTweet = (x) => {
+
+    // confirm(x)
 
 
+    fetch(`http://localhost:3000/users/tweets/${x}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
 
-  if(tweetContent.length>280){
-
-    styleTextMax = {'color':'red'}
+  if (tweetContent.length > 280) {
+    styleTextMax = { color: "red",
+  transitoin:"all .3s" };
   }
   if (!logStatus[1]) {
     router.push("/");
   }
+
   useEffect(() => {
     fetch("http://localhost:3000/users/tweets")
       .then((response) => response.json())
@@ -76,22 +92,13 @@ function Logged() {
   };
 
   const tweetList = tweetData.map((data, i) => {
-
-
-
-    if(data.username == logStatus[2] && data.firstname == logStatus[1]){
-    
-
-        styleHashtag={'display':'inline'}
-
-    }else{
-        styleHashtag={'display':'none'}
-
-        
+    if (data.username == logStatus[2] && data.firstname == logStatus[1]) {
+      styleHashtag = { display: "inline" };
+    } else {
+      styleHashtag = { display: "none" };
     }
     let hashtag = data.content.match(regexHashTag);
 
-  
     return (
       <>
         <div className={style.ListTweet}>
@@ -109,7 +116,12 @@ function Logged() {
             <span className={style.like}>
               <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
             </span>
-            <span  style={styleHashtag} className={style.erase}>
+            <span
+            onClick={() => removeTweet(data._id)}
+              data-id={data._id}
+              style={styleHashtag}
+              className={style.erase}
+            >
               <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
             </span>
           </div>
@@ -145,7 +157,9 @@ function Logged() {
               placeholder="What's up"
             ></input>
             <ul className={style.gridButton}>
-              <li><span style={styleTextMax}>{tweetContent.length}</span>/280</li>
+              <li>
+                <span style={styleTextMax}>{tweetContent.length}</span>/280
+              </li>
               <li>
                 <button onClick={() => tweet()}>Tweet</button>
               </li>

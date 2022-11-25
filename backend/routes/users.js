@@ -170,9 +170,13 @@ router.get("/searchTweets", (req, res) => {
 
   
 router.delete('/tweets/:id', (req, res) => {
-
-  
-
+  Tweet.findByIdAndDelete(req.params.id).then((data) => {
+    if (data) {
+      res.json(data)
+    } else {
+      res.json("rien")
+    }
+  })
 
  });
 
