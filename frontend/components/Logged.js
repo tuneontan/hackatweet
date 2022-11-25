@@ -8,14 +8,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
 function Logged() {
   const dispatch = useDispatch();
-
   const [isErased, setIsErased] = useState(false);
   const router = useRouter();
   let logStatus = useSelector((state) => state.logged.value);
-
   const [tweetContent, setTweetContent] = useState([]);
   const [tweetData, setTweetData] = useState([]);
 
+  let styleHashtag = {};
+
+  let styleTextMax = {}
+
+
+
+  if(tweetContent.length>280){
+
+    styleTextMax = {'color':'red'}
+  }
   if (!logStatus[1]) {
     router.push("/");
   }
@@ -27,7 +35,17 @@ function Logged() {
         setTweetData(data.allTweet);
       });
   }, [tweetData]);
- 
+  const refreshData = () => {
+    fetch("http://localhost:3000/users/tweets")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setTweetData(data.allTweet);
+      });
+  };
+
+  const regexHashTag = /(#+[a-zA-Z0-9(_)]{1,})/;
+
   const tweet = () => {
     // refreshData()
 
@@ -41,6 +59,10 @@ function Logged() {
         username: logStatus[2].toString(),
         content: tweetContent.toString(),
 
+        // firstname: logStatus[1],
+        // username: logStatus[2],
+
+        // content: tweetContent,
         date: new Date().toLocaleTimeString(),
       }),
     })
@@ -54,6 +76,22 @@ function Logged() {
   };
 
   const tweetList = tweetData.map((data, i) => {
+
+
+
+    if(data.username == logStatus[2] && data.firstname == logStatus[1]){
+    
+
+        styleHashtag={'display':'inline'}
+
+    }else{
+        styleHashtag={'display':'none'}
+
+        
+    }
+    let hashtag = data.content.match(regexHashTag);
+
+  
     return (
       <>
         <div className={style.ListTweet}>
@@ -62,18 +100,16 @@ function Logged() {
               <img src="./iconetwitter.jpeg"></img>
             </li>
             <li>
-              {" "}
               <span>{data.username}</span>@{data.firstname}{" "}
               <span>{data.date}</span>
             </li>
           </ul>
           <p>{data.content}</p>
-
           <div className={style.buttonContainer}>
             <span className={style.like}>
               <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
             </span>
-            <span className={style.erase}>
+            <span  style={styleHashtag} className={style.erase}>
               <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
             </span>
           </div>
@@ -109,7 +145,7 @@ function Logged() {
               placeholder="What's up"
             ></input>
             <ul className={style.gridButton}>
-              <li>{tweetContent.length}/280</li>
+              <li><span style={styleTextMax}>{tweetContent.length}</span>/280</li>
               <li>
                 <button onClick={() => tweet()}>Tweet</button>
               </li>
