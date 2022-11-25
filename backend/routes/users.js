@@ -16,6 +16,7 @@ router.post("/signup", (req, res) => {
   if (!checkBody(req.body, ["firstname", "username", "password"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
+    
   }
 
   // Check if the user has not already been registered
